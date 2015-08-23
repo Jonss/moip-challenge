@@ -25,13 +25,12 @@ public class StringTest {
 	}
 	
 	@Test
-	public void should_assert_url_string() throws Exception {
+	public void should_assert_url_string_pattern() throws Exception {
 		String google = "www.google.com";
 		String notAUrl = "www.NotAUrl";
 		
 		Assert.assertFalse(notAUrl.matches(urlRegex));
 		Assert.assertTrue(google.matches(urlRegex));
-		Assert.assertEquals("www.google.com", google);
 	}
 	
 	@Test
