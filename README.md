@@ -28,6 +28,8 @@ Precisei retirar das linhas as urls acessadas e os status responses, então crie
 
 Faço a impressão usando um foreach da API do Java 8.
 
+Preferi criar uma Classe de modelo que contém o valor e quantidade (String e Integer), mesmo os status responses sendo inteiros, não haveria grande ganho em criar uma classe apenas para esse tipo. 
+
 
 #Testes
 
