@@ -44,16 +44,7 @@ public class LogFileTest {
 
 	@Test
 	public void should_read_from_file_and_count_all_rows() throws Exception {
-		Scanner file = MoipLogReader.fromFile("arquivo.txt");
-		
-		String fileLine = file.next();
-		while (fileLine != null) {
-			if (!fileLine.equals("")) {
-				listUrls.add(fileLine);
-			}
-			fileLine = file.next();
-		}
-
+		getAllUrlsFromFile();
 		Assert.assertEquals(42, listUrls.size());
 	}
 
@@ -110,26 +101,23 @@ public class LogFileTest {
 
 	private void getAllUrlsFromFile() throws IOException {
 		Scanner file = MoipLogReader.fromFile("arquivo.txt");
-		String fileLine = file.next();
 
-		while (fileLine != null) {
+		while (file.hasNextLine()) {
+			String fileLine = file.nextLine();
 			if (!fileLine.equals("")) {
 				listUrls.add(LogMatcher.matchUrlPattern(fileLine));
 			}
-			fileLine = file.next();
 		}
 	}
 
 	private void getAllResponseStatusfromFile() throws IOException {
 		Scanner file = MoipLogReader.fromFile("arquivo.txt");
 
-		String fileLine = file.next();
-
-		while (fileLine != null) {
+		while (file.hasNextLine()) {
+			String fileLine = file.nextLine();
 			if (!fileLine.equals("")) {
 				listStatus.add(LogMatcher.matchStatusPattern(fileLine));
 			}
-			fileLine = file.next();
 		}
 	}
 

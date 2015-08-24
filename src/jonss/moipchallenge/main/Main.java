@@ -1,59 +1,54 @@
 package jonss.moipchallenge.main;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
-import jonss.moipchallenge.main.utils.ReadFileUtil;
-import jonss.moipchallenge.main.utils.StringUtils;
+import jonss.moipchallenge.log.LogMatcher;
+import jonss.moipchallenge.log.MoipLogReader;
 import jonss.moipchallenge.model.LogValue;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
 		System.out.println("Digite o nome do arquivo: ");
 
-		Scanner fileName = ReadFileUtil.fromKeyboard();
-		BufferedReader readFromFile = ReadFileUtil.fromFile(fileName.nextLine());
-		if (readFromFile != null) {
-			String readLine = readFromFile.readLine();
+		Scanner fileName = new Scanner(System.in);
+		Scanner file = MoipLogReader.fromFile(fileName.next());
 
+		fileName.close();
+
+		if (file != null) {
 			List<String> urlList = new ArrayList<>();
 			List<String> statusResponseList = new ArrayList<>();
 
-			while (readLine != null) {
-				if (!readLine.equals("")) {
-					urlList.add(StringUtils.matchUrlPattern(readLine));
-					statusResponseList.add(StringUtils.matchStatusPattern(readLine));
+			while (file.hasNextLine()) {
+				String nextLine = file.nextLine();
+				if (!nextLine.equals("")) {
+					urlList.add(LogMatcher.matchUrlPattern(nextLine));
+					statusResponseList.add(LogMatcher.matchStatusPattern(nextLine));
 				}
-				readLine = readFromFile.readLine();
 			}
 
-			/*
-			 * Lista pra receber as urls e status response com suas quantidades
-			 */
 			List<LogValue> fileValuesList = new ArrayList<>();
-			Map<String, Integer> map = new HashMap<String, Integer>();
+			Map<String, Integer> map = new TreeMap<String, Integer>();
 
-			LogValueCollections.addValuesOnMap(urlList, map);
-			LogValueCollections.addValuesOnList(fileValuesList, map);
-			List<LogValue> stream = LogValueCollections.fileValueStream(fileValuesList);
+			LogExtractValues.addValuesOnMap(urlList, map);
+			LogExtractValues.addValuesOnList(fileValuesList, map);
+			List<LogValue> stream = LogExtractValues.fileValueStream(fileValuesList);
 
-			/* Imprime os maiores valores da lista de urls acessads */
-			for (int i = 0; i < LogValueCollections.MAX_VALUES; i++) {
+			for (int i = 0; i < LogExtractValues.MAX_VALUES; i++) {
 				System.out.println(stream.get(i));
 			}
 
-			// Limpa a lista e o map para ser reutilizada
 			clear(fileValuesList, map);
 
-			// Imprime todos os response status
-			LogValueCollections.addValuesOnMap(statusResponseList, map);
-			LogValueCollections.addValuesOnList(fileValuesList, map);
-			LogValueCollections.fileValueStream(fileValuesList).forEach(s -> System.out.println(s));
+			LogExtractValues.addValuesOnMap(statusResponseList, map);
+			LogExtractValues.addValuesOnList(fileValuesList, map);
+			LogExtractValues.fileValueStream(fileValuesList)
+							   .forEach(s -> System.out.println(s));
 		}
 
 	}
