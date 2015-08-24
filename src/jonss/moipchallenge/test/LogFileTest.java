@@ -1,19 +1,19 @@
 package jonss.moipchallenge.test;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import jonss.moipchallenge.main.LogValueCollections;
-import jonss.moipchallenge.main.utils.ReadFileUtil;
-import jonss.moipchallenge.main.utils.StringUtils;
+import jonss.moipchallenge.log.LogMatcher;
+import jonss.moipchallenge.log.MoipLogReader;
+import jonss.moipchallenge.main.LogExtractValues;
 import jonss.moipchallenge.model.LogValue;
 
 public class LogFileTest {
@@ -44,15 +44,14 @@ public class LogFileTest {
 
 	@Test
 	public void should_read_from_file_and_count_all_rows() throws Exception {
-		BufferedReader br = ReadFileUtil.fromFile("arquivo.txt");
-
-		String fileLine = br.readLine();
-
+		Scanner file = MoipLogReader.fromFile("arquivo.txt");
+		
+		String fileLine = file.next();
 		while (fileLine != null) {
 			if (!fileLine.equals("")) {
 				listUrls.add(fileLine);
 			}
-			fileLine = br.readLine();
+			fileLine = file.next();
 		}
 
 		Assert.assertEquals(42, listUrls.size());
@@ -80,10 +79,10 @@ public class LogFileTest {
 	public void should_get_the_three_max_urls_quantities() throws Exception {
 		getAllUrlsFromFile();
 
-		LogValueCollections.addValuesOnMap(listUrls, map);
-		LogValueCollections.addValuesOnList(logValuesList, map);
+		LogExtractValues.addValuesOnMap(listUrls, map);
+		LogExtractValues.addValuesOnList(logValuesList, map);
 
-		List<LogValue> stream = LogValueCollections.fileValueStream(logValuesList);
+		List<LogValue> stream = LogExtractValues.fileValueStream(logValuesList);
 
 		Assert.assertEquals("https://woodenoyster.com.br - 7", stream.get(0).toString());
 		Assert.assertEquals("https://solidstreet.net - 5", stream.get(1).toString());
@@ -94,10 +93,10 @@ public class LogFileTest {
 	public void should_get_all_status_response_quantities() throws IOException {
 		getAllResponseStatusfromFile();
 
-		LogValueCollections.addValuesOnMap(listStatus, map);
-		LogValueCollections.addValuesOnList(logValuesList, map);
+		LogExtractValues.addValuesOnMap(listStatus, map);
+		LogExtractValues.addValuesOnList(logValuesList, map);
 
-		List<LogValue> stream = LogValueCollections.fileValueStream(logValuesList);
+		List<LogValue> stream = LogExtractValues.fileValueStream(logValuesList);
 
 		Assert.assertEquals("500 - 10", stream.get(0).toString());
 		Assert.assertEquals("400 - 9", stream.get(1).toString());
@@ -110,27 +109,27 @@ public class LogFileTest {
 	}
 
 	private void getAllUrlsFromFile() throws IOException {
-		BufferedReader br = ReadFileUtil.fromFile("arquivo.txt");
-		String fileLine = br.readLine();
+		Scanner file = MoipLogReader.fromFile("arquivo.txt");
+		String fileLine = file.next();
 
 		while (fileLine != null) {
 			if (!fileLine.equals("")) {
-				listUrls.add(StringUtils.matchUrlPattern(fileLine));
+				listUrls.add(LogMatcher.matchUrlPattern(fileLine));
 			}
-			fileLine = br.readLine();
+			fileLine = file.next();
 		}
 	}
 
 	private void getAllResponseStatusfromFile() throws IOException {
-		BufferedReader br = ReadFileUtil.fromFile("arquivo.txt");
+		Scanner file = MoipLogReader.fromFile("arquivo.txt");
 
-		String fileLine = br.readLine();
+		String fileLine = file.next();
 
 		while (fileLine != null) {
 			if (!fileLine.equals("")) {
-				listStatus.add(StringUtils.matchStatusPattern(fileLine));
+				listStatus.add(LogMatcher.matchStatusPattern(fileLine));
 			}
-			fileLine = br.readLine();
+			fileLine = file.next();
 		}
 	}
 
