@@ -15,7 +15,7 @@ public class ReadFileUtil {
 					new InputStreamReader(
 						new FileInputStream(fileName)));
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("Arquivo não encontrado.");
 		}
 		return null;
 	}
