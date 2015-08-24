@@ -11,7 +11,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import jonss.moipchallenge.main.FileValueCollections;
+import jonss.moipchallenge.main.LogValueCollections;
 import jonss.moipchallenge.main.utils.ReadFileUtil;
 import jonss.moipchallenge.main.utils.StringUtils;
 import jonss.moipchallenge.model.LogValue;
@@ -80,10 +80,10 @@ public class StringTest {
 	public void should_get_the_three_max_urls_quantities() throws Exception {
 		getAllUrlsFromFile();
 
-		FileValueCollections.addValuesOnMap(listUrls, map);
-		FileValueCollections.addValuesOnList(logValuesList, map);
+		LogValueCollections.addValuesOnMap(listUrls, map);
+		LogValueCollections.addValuesOnList(logValuesList, map);
 
-		List<LogValue> stream = FileValueCollections.fileValueStream(logValuesList);
+		List<LogValue> stream = LogValueCollections.fileValueStream(logValuesList);
 
 		Assert.assertEquals("https://woodenoyster.com.br - 7", stream.get(0).toString());
 		Assert.assertEquals("https://solidstreet.net - 5", stream.get(1).toString());
@@ -94,10 +94,10 @@ public class StringTest {
 	public void should_get_all_status_response_quantities() throws IOException {
 		getAllResponseStatusfromFile();
 
-		FileValueCollections.addValuesOnMap(listStatus, map);
-		FileValueCollections.addValuesOnList(logValuesList, map);
+		LogValueCollections.addValuesOnMap(listStatus, map);
+		LogValueCollections.addValuesOnList(logValuesList, map);
 
-		List<LogValue> stream = FileValueCollections.fileValueStream(logValuesList);
+		List<LogValue> stream = LogValueCollections.fileValueStream(logValuesList);
 
 		Assert.assertEquals("500 - 10", stream.get(0).toString());
 		Assert.assertEquals("400 - 9", stream.get(1).toString());
