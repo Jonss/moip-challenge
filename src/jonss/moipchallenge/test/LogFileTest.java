@@ -16,7 +16,7 @@ import jonss.moipchallenge.main.utils.ReadFileUtil;
 import jonss.moipchallenge.main.utils.StringUtils;
 import jonss.moipchallenge.model.LogValue;
 
-public class StringTest {
+public class LogFileTest {
 
 	private String urlRegex;
 	private List<String> listUrls;
