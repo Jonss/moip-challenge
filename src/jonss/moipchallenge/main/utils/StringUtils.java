@@ -9,10 +9,10 @@ public class StringUtils {
 							.trim().replace("\"", "");
 	}
 
-	public static Integer matchStatusPattern(String string) {
-		return Integer.parseInt(string.isEmpty() ? "" : string.substring(
+	public static String matchStatusPattern(String string) {
+		return string.isEmpty() ? "" : string.substring(
 					string.indexOf("status="), string.length())
-						.replace("status=", "").replace("\"", ""));
+						.replace("status=", "").replace("\"", "");
 	}
 
 }
